@@ -1,4 +1,5 @@
 #include "main.h"
+#include <limits.h>
 
 /**
  * _atoi - converts a string to an integer
@@ -27,7 +28,7 @@ int _atoi(char *s)
 				i++;
 			}
 			if (neg_count % 2 != 0)
-				return (-(int)num);
+				return ((int)(~num + 1));
 			return ((int)num);
 		}
 		i++;
