@@ -10,7 +10,7 @@ int _atoi(char *s)
 {
 	int i;
 	int sign;
-	int num;
+	unsigned int num;
 	int neg_count;
 
 	i = 0;
@@ -32,7 +32,7 @@ int _atoi(char *s)
 				num = num * 10 + (s[i] - '0');
 				i++;
 			}
-			return (sign * num);
+			return (sign * (int)num);
 		}
 		i++;
 	}
