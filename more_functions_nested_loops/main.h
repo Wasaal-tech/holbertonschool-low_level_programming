@@ -11,3 +11,4 @@ void print_line(int n);
 #endif
 void print_line(int n);
 void print_diagonal(int n);
+void print_diagonal(int n);
