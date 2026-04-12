@@ -13,25 +13,33 @@ void print_all(const char * const format, ...)
 	unsigned int i;
 	int sep;
 	char *str;
-	char *fmt;
+	char *types = "cifs";
+	int j;
 
 	va_start(args, format);
 	i = 0;
 	sep = 0;
-	fmt = (char *)format;
-	while (fmt && fmt[i])
+	while (format && format[i])
 	{
+		j = 0;
+		while (types[j] && types[j] != format[i])
+			j++;
 		str = NULL;
-		if (fmt[i] == 'c')
-			printf("%s%c", sep ? ", " : "", va_arg(args, int)), sep = 1;
-		if (fmt[i] == 'i')
-			printf("%s%d", sep ? ", " : "", va_arg(args, int)), sep = 1;
-		if (fmt[i] == 'f')
-			printf("%s%f", sep ? ", " : "", va_arg(args, double)), sep = 1;
-		if (fmt[i] == 's')
+		if (types[j] && types[j] == format[i])
 		{
-			str = va_arg(args, char *);
-			printf("%s%s", sep ? ", " : "", str ? str : "(nil)");
+			if (sep)
+				printf(", ");
+			if (format[i] == 'c')
+				printf("%c", va_arg(args, int));
+			if (format[i] == 'i')
+				printf("%d", va_arg(args, int));
+			if (format[i] == 'f')
+				printf("%f", va_arg(args, double));
+			if (format[i] == 's')
+			{
+				str = va_arg(args, char *);
+				printf("%s", str ? str : "(nil)");
+			}
 			sep = 1;
 		}
 		i++;
