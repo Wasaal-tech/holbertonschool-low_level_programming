@@ -13,34 +13,23 @@ void print_all(const char * const format, ...)
 	unsigned int i;
 	int sep;
 	char *str;
-	char *types = "cifs";
-	int j;
 
 	va_start(args, format);
 	i = 0;
 	sep = 0;
 	while (format && format[i])
 	{
-		j = 0;
-		while (types[j] && types[j] != format[i])
-			j++;
 		str = NULL;
-		if (types[j] && types[j] == format[i])
+		if (format[i] == 'c')
+			printf("%s%c", sep++ ? ", " : "", va_arg(args, int));
+		else if (format[i] == 'i')
+			printf("%s%d", sep++ ? ", " : "", va_arg(args, int));
+		else if (format[i] == 'f')
+			printf("%s%f", sep++ ? ", " : "", va_arg(args, double));
+		else if (format[i] == 's')
 		{
-			if (sep)
-				printf(", ");
-			if (format[i] == 'c')
-				printf("%c", va_arg(args, int));
-			if (format[i] == 'i')
-				printf("%d", va_arg(args, int));
-			if (format[i] == 'f')
-				printf("%f", va_arg(args, double));
-			if (format[i] == 's')
-			{
-				str = va_arg(args, char *);
-				printf("%s", str ? str : "(nil)");
-			}
-			sep = 1;
+			str = va_arg(args, char *);
+			printf("%s%s", sep++ ? ", " : "", str ? str : "(nil)");
 		}
 		i++;
 	}
