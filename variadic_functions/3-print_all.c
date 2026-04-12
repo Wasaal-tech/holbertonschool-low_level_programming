@@ -13,20 +13,22 @@ void print_all(const char * const format, ...)
 	unsigned int i;
 	int sep;
 	char *str;
+	char c;
 
 	va_start(args, format);
 	i = 0;
 	sep = 0;
 	while (format && format[i])
 	{
+		c = format[i];
 		str = NULL;
-		if (format[i] == 'c')
+		if (c == 'c')
 			printf("%s%c", sep++ ? ", " : "", va_arg(args, int));
-		else if (format[i] == 'i')
+		if (c == 'i')
 			printf("%s%d", sep++ ? ", " : "", va_arg(args, int));
-		else if (format[i] == 'f')
+		if (c == 'f')
 			printf("%s%f", sep++ ? ", " : "", va_arg(args, double));
-		else if (format[i] == 's')
+		if (c == 's')
 		{
 			str = va_arg(args, char *);
 			printf("%s%s", sep++ ? ", " : "", str ? str : "(nil)");
