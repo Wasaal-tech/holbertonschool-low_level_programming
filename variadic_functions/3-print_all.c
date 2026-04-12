@@ -2,51 +2,9 @@
 #include <stdio.h>
 
 /**
- * print_char - prints a char
- * @args: va_list
- * Return: void
- */
-void print_char(va_list args)
-{
-	printf("%c", va_arg(args, int));
-}
-
-/**
- * print_int - prints an int
- * @args: va_list
- * Return: void
- */
-void print_int(va_list args)
-{
-	printf("%d", va_arg(args, int));
-}
-
-/**
- * print_float - prints a float
- * @args: va_list
- * Return: void
- */
-void print_float(va_list args)
-{
-	printf("%f", va_arg(args, double));
-}
-
-/**
- * print_string - prints a string
- * @args: va_list
- * Return: void
- */
-void print_string(va_list args)
-{
-	char *str;
-
-	str = va_arg(args, char *);
-	printf("%s", str ? str : "(nil)");
-}
-
-/**
  * print_all - prints anything
  * @format: list of types of arguments
+ *
  * Return: void
  */
 void print_all(const char * const format, ...)
@@ -54,14 +12,9 @@ void print_all(const char * const format, ...)
 	va_list args;
 	unsigned int i;
 	int sep;
+	char *str;
 	int j;
-	struct {char c; void (*f)(va_list);} types[] = {
-		{'c', print_char},
-		{'i', print_int},
-		{'f', print_float},
-		{'s', print_string},
-		{0, NULL}
-	};
+	char types[] = "cifs";
 
 	va_start(args, format);
 	i = 0;
@@ -69,13 +22,23 @@ void print_all(const char * const format, ...)
 	while (format && format[i])
 	{
 		j = 0;
-		while (types[j].f && types[j].c != format[i])
+		while (types[j] && types[j] != format[i])
 			j++;
-		if (types[j].f)
+		if (types[j])
 		{
 			if (sep)
 				printf(", ");
-			types[j].f(args);
+			if (format[i] == 'c')
+				printf("%c", va_arg(args, int));
+			if (format[i] == 'i')
+				printf("%d", va_arg(args, int));
+			if (format[i] == 'f')
+				printf("%f", va_arg(args, double));
+			if (format[i] == 's')
+			{
+				str = va_arg(args, char *);
+				printf("%s", str ? str : "(nil)");
+			}
 			sep = 1;
 		}
 		i++;
