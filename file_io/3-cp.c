@@ -5,6 +5,21 @@
 #include <stdio.h>
 
 /**
+ * close_fd - closes a file descriptor
+ * @fd: file descriptor to close
+ * @name: name of file
+ */
+void close_fd(int fd, char *name)
+{
+	if (close(fd) == -1)
+	{
+		dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", fd);
+		(void)name;
+		exit(100);
+	}
+}
+
+/**
  * main - copies content of a file to another file
  * @argc: number of arguments
  * @argv: array of arguments
@@ -34,7 +49,7 @@ int main(int argc, char *argv[])
 	if (fd_to == -1)
 	{
 		dprintf(STDERR_FILENO, "Error: Can't write to %s\n", argv[2]);
-		close(fd_from);
+		close_fd(fd_from, argv[1]);
 		exit(99);
 	}
 	while ((r = read(fd_from, buf, 1024)) > 0)
@@ -43,20 +58,12 @@ int main(int argc, char *argv[])
 		if (w != r)
 		{
 			dprintf(STDERR_FILENO, "Error: Can't write to %s\n", argv[2]);
-			close(fd_from);
-			close(fd_to);
+			close_fd(fd_from, argv[1]);
+			close_fd(fd_to, argv[2]);
 			exit(99);
 		}
 	}
-	if (close(fd_from) == -1)
-	{
-		dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", fd_from);
-		exit(100);
-	}
-	if (close(fd_to) == -1)
-	{
-		dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", fd_to);
-		exit(100);
-	}
+	close_fd(fd_from, argv[1]);
+	close_fd(fd_to, argv[2]);
 	return (0);
 }
